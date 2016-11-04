@@ -18,7 +18,7 @@ public class DespesaDAO {
     private static final String SQLConsultaId = "SELECT * FROM Despesa WHERE id=?";
     private static final String SQLAtualiza = "UPDATE Despesa SET ?=? WHERE ?=?";
     private static final String SQLRemove = "DELETE FROM Despesa WHERE id=?";
-    private static final String SQLInsere = "INSERT INTO Despesa (id, descricao, valor, parcelado, local, dataVencimento, cartao, tag, despesaPaga) VALUES (?,?,?,?,?,?,?,?)";
+    private static final String SQLInsere = "INSERT INTO Despesa (id, descricao, valor, parcelado, local, dataVencimento, cartao, tag, despesaPaga) VALUES (?,?,?,?,?,?,?)";
 
     public DespesaDAO(Connection conexao) {
         this.conexao = conexao;
@@ -27,14 +27,13 @@ public class DespesaDAO {
     public Integer createDespesa(Despesa despesa) throws SQLException{
         Integer idDespesaCriado = 0;
         try(PreparedStatement stm = conexao.prepareStatement(SQLInsere, Statement.RETURN_GENERATED_KEYS)){
-            stm.setString(1, despesa.getDescricao());
-            stm.setBigDecimal(2, despesa.getValor());
-            stm.setBoolean(3, despesa.isParcelado());
-            stm.setString(4, despesa.getLocal());
-            stm.setDate(5, (Date) despesa.getDataVencimento());
-            stm.setBoolean(6, despesa.isCartao());
-//            stm.setString(7, despesa.getDescricao());
-            stm.setBoolean(8, despesa.isDespesaPaga());
+            stm.setString(1, despesa.getDescricaoDespesa());
+            stm.setString(2, despesa.getLocalDespesa());
+            stm.setInt(3, despesa.getTipoDespesa());
+            stm.setInt(4, despesa.getFkCartaoUsado());
+            stm.setInt(5, despesa.getTag());
+            stm.setBigDecimal(6, despesa.getNumeroParcela());
+            stm.setBigDecimal(7, despesa.getValorTotalDespesa());
             conexao.commit();
         }catch(Exception ex){
             System.out.println("Erro ao tentar executar insercao: " + ex.getMessage());

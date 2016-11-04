@@ -7,10 +7,16 @@ package br.edu.com.uricer.model;
 public class Cartao {
     private int idCartao;
     private String nomeCartao;
+    private String banco;
 //    ver sobre ter todos os cartões cadastrados, para ter o escolhido aqui (CardFlag
     
-    public Cartao(String nomeCartao) {
+    public Cartao(String nomeCartao, String banco) {
         this.nomeCartao = nomeCartao;
+        this.banco = banco;
+    }
+
+    public Cartao() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     public int getIdCartao() {
@@ -27,6 +33,14 @@ public class Cartao {
 
     public void setNomeCartao(String nomeCartao) {
         this.nomeCartao = nomeCartao;
+    }
+
+    public String getBanco() {
+        return banco;
+    }
+
+    public void setBanco(String banco) {
+        this.banco = banco;
     }
     
 }

@@ -9,6 +9,7 @@ import java.util.Date;
  */
 public class Receita {
     private int idReceita;
+    private String descricaoReceita;
     private BigDecimal valorReceita;
     private Date dataReceita;
 
@@ -23,6 +24,14 @@ public class Receita {
 
     public void setIdReceita(int idReceita) {
         this.idReceita = idReceita;
+    }
+    
+    public String getDescricaoReceita() {
+        return descricaoReceita;
+    }
+
+    public void setDescricaoReceita(String descricaoReceita) {
+        this.descricaoReceita = descricaoReceita;
     }
 
     public BigDecimal getValorReceita() {

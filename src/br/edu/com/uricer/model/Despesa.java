@@ -1,7 +1,9 @@
 package br.edu.com.uricer.model;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -9,22 +11,38 @@ import java.util.Date;
  */
 public class Despesa {
     private int idDespesa;
-    private String descricao;
-    private BigDecimal valor;
-    private boolean parcelado;
-    private String local;
-    private Date dataVencimento;
-    private boolean cartao;
-    Tag tag;
-    private boolean despesaPaga;
+    private String descricaoDespesa;
+    private String localDespesa;
+    private TipoDespesa tipoDespesa;
+    private int fkCartaoUsado;
+    private Tag tag;
+    private BigDecimal numeroParcela;
+    private BigDecimal valorTotalDespesa;
 
-    public Despesa(String descricao, BigDecimal valor, boolean parcelado, String local, Date dataVencimento, boolean cartao) {
-        this.descricao = descricao;
-        this.valor = valor;
-        this.parcelado = parcelado;
-        this.local = local;
-        this.dataVencimento = dataVencimento;
-        this.cartao = cartao;
+    public Despesa(String descricaoDespesa, String localDespesa, TipoDespesa tipoDespesa, int fkCartaoUsado, Tag tag, BigDecimal numeroParcela, BigDecimal valorTotalDespesa) {
+        this.descricaoDespesa = descricaoDespesa;
+        this.localDespesa = localDespesa;
+        this.tipoDespesa = tipoDespesa;
+        this.fkCartaoUsado = fkCartaoUsado;
+        this.tag = tag;
+        this.numeroParcela = numeroParcela;
+        this.valorTotalDespesa = valorTotalDespesa;
+    }
+
+    public int getTipoDespesa() {
+        return tipoDespesa.getIdTipoDespesa();
+    }
+
+    public void setTipoDespesa(TipoDespesa tipoDespesa) {
+        this.tipoDespesa = tipoDespesa;
+    }
+
+    public int getTag() {
+        return tag.getIdTag();
+    }
+
+    public void setTag(Tag tag) {
+        this.tag = tag;
     }
 
     public int getIdDespesa() {
@@ -34,60 +52,50 @@ public class Despesa {
     public void setIdDespesa(int idDespesa) {
         this.idDespesa = idDespesa;
     }
-    
-    public String getDescricao() {
-        return descricao;
+
+    public String getDescricaoDespesa() {
+        return descricaoDespesa;
     }
 
-    public void setDescricao(String Descricao) {
-        this.descricao = descricao;
+    public void setDescricaoDespesa(String descricaoDespesa) {
+        this.descricaoDespesa = descricaoDespesa;
     }
 
-    public BigDecimal getValor() {
-        return valor;
+    public String getLocalDespesa() {
+        return localDespesa;
     }
 
-    public void setValor(BigDecimal valor) {
-        this.valor = valor;
+    public void setLocalDespesa(String localDespesa) {
+        this.localDespesa = localDespesa;
     }
 
-    public boolean isParcelado() {
-        return parcelado;
+    public int getFkCartaoUsado() {
+        return fkCartaoUsado;
     }
 
-    public void setParcelado(boolean parcelado) {
-        this.parcelado = parcelado;
+    public void setFkCartaoUsado(int fkCartaoUsado) {
+        this.fkCartaoUsado = fkCartaoUsado;
     }
 
-    public String getLocal() {
-        return local;
+    public BigDecimal getNumeroParcela() {
+        return numeroParcela;
     }
 
-    public void setLocal(String local) {
-        this.local = local;
+    public void setNumeroParcela(BigDecimal numeroParcela) {
+        this.numeroParcela = numeroParcela;
+        List<Parcela> parcelas = new ArrayList();
+        BigDecimal valorParcela = getValorTotalDespesa().divide(numeroParcela);
+        int numeroParcelas = numeroParcela.intValue();
+        for(int i = 0; i < numeroParcelas; i++){
+             parcelas.set(i, new Parcela(valorParcela, getIdDespesa()));
+        }
     }
 
-    public Date getDataVencimento() {
-        return dataVencimento;
+    public BigDecimal getValorTotalDespesa() {
+        return valorTotalDespesa;
     }
 
-    public void setDataVencimento(Date dataVencimento) {
-        this.dataVencimento = dataVencimento;
-    }
-
-    public boolean isCartao() {
-        return cartao;
-    }
-
-    public void setCartao(boolean cartao) {
-        this.cartao = cartao;
-    }
-
-    public boolean isDespesaPaga() {
-        return despesaPaga;
-    }
-
-    public void setDespesaPaga(boolean despesaPaga) {
-        this.despesaPaga = despesaPaga;
+    public void setValorTotalDespesa(BigDecimal valorTotalDespesa) {
+        this.valorTotalDespesa = valorTotalDespesa;
     }
 }
