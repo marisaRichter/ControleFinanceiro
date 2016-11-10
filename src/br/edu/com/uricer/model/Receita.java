@@ -13,9 +13,14 @@ public class Receita {
     private BigDecimal valorReceita;
     private Date dataReceita;
 
-    public Receita(BigDecimal valorReceita, Date dataReceita) {
+    public Receita(String descricaoReceita, BigDecimal valorReceita, Date dataReceita) {
+        this.descricaoReceita = descricaoReceita;
         this.valorReceita = valorReceita;
         this.dataReceita = dataReceita;
+    }
+
+    public Receita() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     public int getIdReceita() {
