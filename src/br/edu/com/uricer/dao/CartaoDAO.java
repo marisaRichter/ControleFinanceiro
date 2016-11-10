@@ -55,8 +55,8 @@ public class CartaoDAO {
     
     public void updateCartao(Cartao cartao) throws SQLException {
         try(PreparedStatement stm = conexao.prepareStatement(SQLUpdate, Statement.RETURN_GENERATED_KEYS)){
-            stm.setString(3, cartao.getNomeCartao());
-            stm.setString(3, cartao.getBanco());
+            stm.setString(1, cartao.getNomeCartao());
+            stm.setString(2, cartao.getBanco());
             stm.setInt(3, cartao.getIdCartao());            
             conexao.commit();
         }catch(Exception ex){
@@ -85,7 +85,6 @@ public class CartaoDAO {
     }
     
     public List<Cartao> findByNomeCartao(String nome) throws SQLException {
-        String sql = "Select * from Pessoas p where upper(p.nome) like ?";
         List<Cartao> cartoes = new ArrayList<>();
         Cartao cartao = null;
         try(PreparedStatement stm = conexao.prepareStatement(SQLFindByNome, Statement.RETURN_GENERATED_KEYS)){
