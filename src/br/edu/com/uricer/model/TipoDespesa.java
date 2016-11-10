@@ -12,6 +12,10 @@ public class TipoDespesa {
         this.descricaoTipoDespesa = descricaoTipoDespesa;
     }
 
+    public TipoDespesa() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     public int getIdTipoDespesa() {
         return idTipoDespesa;
     }
