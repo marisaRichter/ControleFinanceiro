@@ -1,34 +1,49 @@
 package br.edu.com.uricer.model;
 
+import java.math.BigDecimal;
+import java.util.Date;
+
 /**
  *
  * @author marisa.richter
  */
 public class Usuario {
-    private int idPessoa;
-    private String login;
+    private int id;
+    private String nome;
     private String senha;
 
-    public Usuario(int idPessoa, String login, String senha) {
-        this.idPessoa = idPessoa;
-        this.login = login;
+    public Usuario(int id, String nome, String senha) {
+        this.id = id;
+        this.nome = nome;
         this.senha = senha;
     }
+    public Despesa adicionarDespesa(String descricaoDespesa, String localDespesa, TipoDespesa tipoDespesa, Cartao fkCartaoUsado, Tag tag, BigDecimal numeroParcela, BigDecimal valorTotalDespesa){
+        Despesa despesa = new Despesa(descricaoDespesa, localDespesa, tipoDespesa, fkCartaoUsado, tag, numeroParcela, valorTotalDespesa);
+        return despesa;
+    }
     
-    public int getIdPessoa() {
-        return idPessoa;
+    public Receita adicionarReceita(String descricaoReceita, BigDecimal valorReceita, Date dataReceita){
+        Receita receita = new Receita(descricaoReceita, valorReceita, dataReceita);
+        return receita;
+    }
+    
+    public void emitirFaturaCartao(Date periodo){
+        
+    }
+    public int getId() {
+        return id;
     }
 
-    public void setIdPessoa(int idPessoa) {
-        this.idPessoa = idPessoa;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getLogin() {
-        return login;
+        return nome;
     }
 
     public void setLogin(String login) {
-        this.login = login;
+        this.nome = login;
     }
 
     public String getSenha() {
