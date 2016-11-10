@@ -14,12 +14,12 @@ public class Despesa {
     private String descricaoDespesa;
     private String localDespesa;
     private TipoDespesa tipoDespesa;
-    private int fkCartaoUsado;
+    private Cartao fkCartaoUsado;
     private Tag tag;
     private BigDecimal numeroParcela;
     private BigDecimal valorTotalDespesa;
 
-    public Despesa(String descricaoDespesa, String localDespesa, TipoDespesa tipoDespesa, int fkCartaoUsado, Tag tag, BigDecimal numeroParcela, BigDecimal valorTotalDespesa) {
+    public Despesa(String descricaoDespesa, String localDespesa, TipoDespesa tipoDespesa, Cartao fkCartaoUsado, Tag tag, BigDecimal numeroParcela, BigDecimal valorTotalDespesa) {
         this.descricaoDespesa = descricaoDespesa;
         this.localDespesa = localDespesa;
         this.tipoDespesa = tipoDespesa;
@@ -27,6 +27,10 @@ public class Despesa {
         this.tag = tag;
         this.numeroParcela = numeroParcela;
         this.valorTotalDespesa = valorTotalDespesa;
+    }
+
+    public Despesa() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     public int getTipoDespesa() {
@@ -70,10 +74,10 @@ public class Despesa {
     }
 
     public int getFkCartaoUsado() {
-        return fkCartaoUsado;
+        return fkCartaoUsado.getIdCartao();
     }
 
-    public void setFkCartaoUsado(int fkCartaoUsado) {
+    public void setFkCartaoUsado(Cartao fkCartaoUsado) {
         this.fkCartaoUsado = fkCartaoUsado;
     }
 
