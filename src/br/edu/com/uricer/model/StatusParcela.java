@@ -12,6 +12,10 @@ public class StatusParcela {
         this.statusParcela = statusParcela;
     }
 
+    public StatusParcela() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     public String getStatusParcela() {
         return statusParcela;
     }
