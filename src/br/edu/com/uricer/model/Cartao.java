@@ -43,4 +43,9 @@ public class Cartao {
         this.banco = banco;
     }
     
+    @Override
+    public String toString() {
+        return "Pessoa[id: " + idCartao + " nome: " + nomeCartao + "," + "banco: " + banco + "]";
+    }
+    
 }
