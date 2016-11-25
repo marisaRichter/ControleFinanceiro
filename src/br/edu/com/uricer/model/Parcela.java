@@ -1,6 +1,7 @@
 package br.edu.com.uricer.model;
 
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.util.Date;
 
 /**
@@ -14,13 +15,15 @@ public class Parcela {
     private int fkDespesa;
     private Date dataVencimento;
     private BigDecimal jurosPorVencimento;
-    private StatusParcela statusParcela;
+    private int statusParcela;
 
-    public Parcela(BigDecimal valorParcela, int fkDespesa) {
+    public Parcela(BigDecimal valorParcela, int fkDespesa) throws SQLException {
         this.valorParcela = valorParcela;
         this.saldoAPagar = valorParcela;
-        this.statusParcela.setStatusParcela("PAGAR");
+        this.statusParcela = 3;
         this.fkDespesa = fkDespesa;
+        this.dataVencimento = null;
+        this.jurosPorVencimento = new BigDecimal(0.0);
     }
 
     public Parcela() {
@@ -59,11 +62,11 @@ public class Parcela {
         this.saldoAPagar = saldoAPagar;
     }
 
-    public Integer getStatusParcela() {
-        return statusParcela.getIdStatus();
+    public int getStatusParcela() {
+        return statusParcela;
     }
 
-    public void setStatusParcela(StatusParcela statusParcela) {
+    public void setStatusParcela(int statusParcela) {
         this.statusParcela = statusParcela;
     }
 

@@ -16,88 +16,74 @@ import java.util.List;
 public class TipoDespesaDAO {
     private Connection conexao = null;
     
-    private static final String SQLList = "SELECT * FROM TipoDespesa";
-    private static final String SQLFindById = "SELECT * FROM TipoDespesa WHERE id=?";
-    private static final String SQLFindByNome = "SELECT * FROM TipoDespesa WHERE descricaoTipoDespesa=?";
-    private static final String SQLUpdate = "UPDATE TipoDespesa SET descricaoTipoDespesa=? WHERE id=?";
-    private static final String SQLDelete = "DELETE FROM TipoDespesa WHERE id=?";
-    private static final String SQLCreate = "INSERT INTO TipoDespesa (id, descricaoTipoDespesa) VALUES (?,?)";
+    private static final String SQLList = "SELECT * FROM \"TipoDespesa\";";
+    private static final String SQLFindById = "SELECT * FROM \"TipoDespesa\" WHERE id=?;";
+    private static final String SQLFindByNome = "SELECT * FROM \"TipoDespesa\" WHERE descricao LIKE ?;";
 
     public TipoDespesaDAO(Connection conexao) {
         this.conexao = conexao;
     }
     
-    public Integer createTipoDespesa(TipoDespesa tipoDespesa) throws SQLException{
-        Integer idTipoDespesaCriado = 0;
-        try(PreparedStatement stm = conexao.prepareStatement(SQLCreate, Statement.RETURN_GENERATED_KEYS)){
-            stm.setString(1, tipoDespesa.getDescricaoTipoDespesa());
-            
-            conexao.commit();
-        }catch(Exception ex){
-            System.out.println("Erro ao tentar executar insercao: " + ex.getMessage());
-            conexao.rollback();
-        }
-        
-        return idTipoDespesaCriado;
-    }
-    
-    public void deleteTipoDespesa(TipoDespesa tipoDespesa) throws SQLException{
-        try(PreparedStatement stm = conexao.prepareStatement(SQLDelete, Statement.RETURN_GENERATED_KEYS)){
-            stm.setInt(1, tipoDespesa.getIdTipoDespesa());
-            
-            conexao.commit();
-        }catch(Exception ex){
-            System.out.println("Erro ao tentar executar delete: " + ex.getMessage());
-            conexao.rollback();
-        }     
-    }
-    
-    public void updateTipoDespesa(TipoDespesa tipoDespesa) throws SQLException {
-        try(PreparedStatement stm = conexao.prepareStatement(SQLUpdate, Statement.RETURN_GENERATED_KEYS)){
-            stm.setString(1, tipoDespesa.getDescricaoTipoDespesa());
-            stm.setInt(2, tipoDespesa.getIdTipoDespesa());            
-            conexao.commit();
-        }catch(Exception ex){
-            System.out.println("Erro ao tentar executar atualização: " + ex.getMessage());
-            conexao.rollback();
-        }  
-    }
     public TipoDespesa findByIdTipoDespesa(Integer id) throws SQLException {
         TipoDespesa tipoDespesa = null;
         try(PreparedStatement stm = conexao.prepareStatement(SQLFindById, Statement.RETURN_GENERATED_KEYS)){
             stm.setInt(1, id);            
             stm.execute();
             try(ResultSet resultSet = stm.getResultSet()) {
-                while(resultSet.next()) {
-                    tipoDespesa = new TipoDespesa();
-                    tipoDespesa.setIdTipoDespesa(resultSet.getInt("id"));
-                    tipoDespesa.setDescricaoTipoDespesa(resultSet.getString("descricaoTipoDespesa"));
-                }
+                resultSet.next();
+                    int idT = (resultSet.getInt("id"));
+                    String descricao = (resultSet.getString("descricao"));
+                    tipoDespesa = new TipoDespesa(descricao);
+                    tipoDespesa.setIdTipoDespesa(idT);
+                
+                resultSet.close();
             }
+            stm.close();
         }catch(Exception ex){
-            System.out.println("Erro ao tentar executar busca por id: " + ex.getMessage());
+            System.out.println("Erro ao tentar executar busca por id tipo: " + ex.getMessage());
         }  
         
         return tipoDespesa;
     }
     
     public List<TipoDespesa> findByDescricaoTipoDespesa(String descricaoTipoDespesa) throws SQLException {
-        List<TipoDespesa> tipoDespesas = new ArrayList<>();
+        List<TipoDespesa> tipos = new ArrayList<>();
         TipoDespesa tipoDespesa = null;
-        try(PreparedStatement stm = conexao.prepareStatement(SQLFindByNome, Statement.RETURN_GENERATED_KEYS)){
-            stm.setString(1, "%" + descricaoTipoDespesa.toUpperCase() + "%");            
+        try (PreparedStatement stm = conexao.prepareStatement(SQLFindByNome)) {
+            stm.setString(1, "%" + descricaoTipoDespesa + "%");
             stm.execute();
-            try(ResultSet resultSet = stm.getResultSet()) {
-                while(resultSet.next()) {
-                    tipoDespesa = new TipoDespesa();
-                    tipoDespesa.setIdTipoDespesa(resultSet.getInt("id"));
-                    tipoDespesa.setDescricaoTipoDespesa(resultSet.getString("descricaoTipoDespesa"));
-                    tipoDespesas.add(tipoDespesa);
+            try (ResultSet resultSet = stm.getResultSet()) {
+                while (resultSet.next()) {
+                    Integer id = resultSet.getInt("id");
+                    String categoria = resultSet.getString("descricao");
+                    tipoDespesa = new TipoDespesa(categoria);
+                    tipoDespesa.setIdTipoDespesa(id);
+                    tipos.add(tipoDespesa);
                 }
+                resultSet.close();
             }
-        }catch(Exception ex){
-            System.out.println("Erro ao tentar executar busca por nome: " + ex.getMessage());
-        } 
-        return tipoDespesas;
+            stm.close();
+        } catch (Exception ex) {
+            System.out.println("Erro ao tentar executar busca por topo: " + ex.getMessage());
+        }
+        return tipos;
+    }
+    
+    public List<TipoDespesa> listar() throws SQLException {
+        List<TipoDespesa> tipos = new ArrayList<>();
+        try (ResultSet resultSet = conexao.createStatement().executeQuery(SQLList)) {
+            while (resultSet.next()) {
+                String descricao = resultSet.getString("descricao");
+                int id = resultSet.getInt("id");
+                TipoDespesa tipoDespesa = new TipoDespesa(descricao);
+                tipoDespesa.setIdTipoDespesa(id);
+                tipos.add(tipoDespesa);
+            }
+            resultSet.close();
+        } catch (Exception ex) {
+            System.out.println("Erro ao tentar executar list: " + ex.getMessage());
+        }
+        
+        return tipos;
     }
 }

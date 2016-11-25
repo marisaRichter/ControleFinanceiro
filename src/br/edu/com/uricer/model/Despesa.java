@@ -1,6 +1,7 @@
 package br.edu.com.uricer.model;
 
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -18,8 +19,9 @@ public class Despesa {
     private Tag tag;
     private BigDecimal numeroParcela;
     private BigDecimal valorTotalDespesa;
+    private Date dataDespesa;
 
-    public Despesa(String descricaoDespesa, String localDespesa, TipoDespesa tipoDespesa, Cartao fkCartaoUsado, Tag tag, BigDecimal numeroParcela, BigDecimal valorTotalDespesa) {
+    public Despesa(String descricaoDespesa, String localDespesa, TipoDespesa tipoDespesa, Cartao fkCartaoUsado, Tag tag, BigDecimal numeroParcela, BigDecimal valorTotalDespesa, Date dataDespesa){
         this.descricaoDespesa = descricaoDespesa;
         this.localDespesa = localDespesa;
         this.tipoDespesa = tipoDespesa;
@@ -27,22 +29,23 @@ public class Despesa {
         this.tag = tag;
         this.numeroParcela = numeroParcela;
         this.valorTotalDespesa = valorTotalDespesa;
+        this.dataDespesa = dataDespesa;
     }
 
     public Despesa() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public int getTipoDespesa() {
-        return tipoDespesa.getIdTipoDespesa();
+    public TipoDespesa getTipoDespesa() {
+        return tipoDespesa;
     }
 
     public void setTipoDespesa(TipoDespesa tipoDespesa) {
         this.tipoDespesa = tipoDespesa;
     }
 
-    public int getTag() {
-        return tag.getIdTag();
+    public Tag getTag() {
+        return tag;
     }
 
     public void setTag(Tag tag) {
@@ -73,8 +76,8 @@ public class Despesa {
         this.localDespesa = localDespesa;
     }
 
-    public int getFkCartaoUsado() {
-        return fkCartaoUsado.getIdCartao();
+    public Cartao getFkCartaoUsado() {
+        return fkCartaoUsado;
     }
 
     public void setFkCartaoUsado(Cartao fkCartaoUsado) {
@@ -87,12 +90,6 @@ public class Despesa {
 
     public void setNumeroParcela(BigDecimal numeroParcela) {
         this.numeroParcela = numeroParcela;
-        List<Parcela> parcelas = new ArrayList();
-        BigDecimal valorParcela = getValorTotalDespesa().divide(numeroParcela);
-        int numeroParcelas = numeroParcela.intValue();
-        for(int i = 0; i < numeroParcelas; i++){
-             parcelas.set(i, new Parcela(valorParcela, getIdDespesa()));
-        }
     }
 
     public BigDecimal getValorTotalDespesa() {
@@ -101,5 +98,13 @@ public class Despesa {
 
     public void setValorTotalDespesa(BigDecimal valorTotalDespesa) {
         this.valorTotalDespesa = valorTotalDespesa;
+    }
+
+    public Date getDataDespesa() {
+        return dataDespesa;
+    }
+
+    public void setDataDespesa(Date dataDespesa) {
+        this.dataDespesa = dataDespesa;
     }
 }

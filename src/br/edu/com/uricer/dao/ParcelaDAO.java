@@ -21,7 +21,7 @@ public class ParcelaDAO {
     private static final String SQLFindById = "SELECT * FROM Parcela WHERE id=?";
     private static final String SQLUpdate = "UPDATE Parcela SET valorParcela=?, saldoParcela=?, fkDespesa=?, dataVencimento=?, jurosPorVencimento=?, statusParcela=? WHERE id=?";
     private static final String SQLDelete = "DELETE FROM Parcela WHERE id=?";
-    private static final String SQLCreate = "INSERT INTO Parcela (valorParcela, saldoParcela, fkDespesa, dataVencimento, jurosPorVencimento, statusParcela) VALUES (?,?,?,?,?,?)";
+    private static final String SQLCreate = "INSERT INTO \"Parcela\" (valor_parcela, a_pagar, despesa, data_vencimento, juros_venc, status_parcela) VALUES (?,?,?,?,?,?);";
     private final StatusDAO StatusDAO;
 
     public ParcelaDAO(Connection conexao) {
@@ -29,7 +29,7 @@ public class ParcelaDAO {
         StatusDAO = new StatusDAO(conexao);
     }
     
-    public Integer createTipoDespesa(Parcela parcela) throws SQLException{
+    public Integer createParcela(Parcela parcela) throws SQLException{
         Integer idParcelaCriada = 0;
         try(PreparedStatement stm = conexao.prepareStatement(SQLCreate, Statement.RETURN_GENERATED_KEYS)){
             stm.setBigDecimal(1, parcela.getValorParcela());
@@ -38,8 +38,10 @@ public class ParcelaDAO {
             stm.setDate(4, (java.sql.Date) parcela.getDataVencimento());
             stm.setBigDecimal(5, parcela.getJurosPorVencimento());
             stm.setInt(6, parcela.getStatusParcela());
+            stm.execute();
             
             conexao.commit();
+            System.out.println("parcela criada");
         }catch(Exception ex){
             System.out.println("Erro ao tentar executar insercao: " + ex.getMessage());
             conexao.rollback();
@@ -74,29 +76,29 @@ public class ParcelaDAO {
             conexao.rollback();
         }  
     }
-    public Parcela findByIdParcela(Integer id) throws SQLException {
-        Parcela parcela = null;
-        try(PreparedStatement stm = conexao.prepareStatement(SQLFindById, Statement.RETURN_GENERATED_KEYS)){
-            stm.setInt(1, id);            
-            stm.execute();
-            try(ResultSet resultSet = stm.getResultSet()) {
-                while(resultSet.next()) {
-                    parcela = new Parcela();
-                    parcela.setIdParcela(resultSet.getInt("id"));
-                    parcela.setValorParcela(resultSet.getBigDecimal("valorParcela"));
-                    parcela.setSaldoAPagar(resultSet.getBigDecimal("saldoParcela"));
-                    parcela.setFkDespesa(resultSet.getInt("fkDespesa"));
-                    parcela.setDataVencimento(resultSet.getDate("dataVencimento"));
-                    parcela.setJurosPorVencimento(resultSet.getBigDecimal("jurosPorVencimento"));
-                    parcela.setStatusParcela(StatusDAO.findByIdStatus(resultSet.getInt("statusParcela")));
-                    
-                }
-            }
-        }catch(Exception ex){
-            System.out.println("Erro ao tentar executar busca por id: " + ex.getMessage());
-        }  
-        
-        return parcela;
-    }
+//    public Parcela findByIdParcela(Integer id) throws SQLException {
+//        Parcela parcela = null;
+//        try(PreparedStatement stm = conexao.prepareStatement(SQLFindById, Statement.RETURN_GENERATED_KEYS)){
+//            stm.setInt(1, id);            
+//            stm.execute();
+//            try(ResultSet resultSet = stm.getResultSet()) {
+//                while(resultSet.next()) {
+//                    parcela = new Parcela();
+//                    parcela.setIdParcela(resultSet.getInt("id"));
+//                    parcela.setValorParcela(resultSet.getBigDecimal("valorParcela"));
+//                    parcela.setSaldoAPagar(resultSet.getBigDecimal("saldoParcela"));
+//                    parcela.setFkDespesa(resultSet.getInt("fkDespesa"));
+//                    parcela.setDataVencimento(resultSet.getDate("dataVencimento"));
+//                    parcela.setJurosPorVencimento(resultSet.getBigDecimal("jurosPorVencimento"));
+//                    parcela.setStatusParcela(StatusDAO.findByIdStatus(resultSet.getInt("statusParcela")));
+//                    
+//                }
+//            }
+//        }catch(Exception ex){
+//            System.out.println("Erro ao tentar executar busca por id: " + ex.getMessage());
+//        }  
+//        
+//        return parcela;
+//    }
     
 }
