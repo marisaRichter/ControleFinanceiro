@@ -35,6 +35,7 @@ public class AddTag extends javax.swing.JInternalFrame {
         tags = new ArrayList<>();
         tagTableModel = new TagTableModel(tags);
         tableTag.setModel(tagTableModel);
+        BotaoExcluir.enable(false);
     }
 
     /**
@@ -68,7 +69,7 @@ public class AddTag extends javax.swing.JInternalFrame {
         setIconifiable(true);
         setMaximizable(true);
         setResizable(true);
-        setTitle("Teste");
+        setTitle("Tag");
 
         LabelCategoria.setText("Categoria: ");
 
@@ -106,24 +107,24 @@ public class AddTag extends javax.swing.JInternalFrame {
         PainelPesquisarLayout.setHorizontalGroup(
             PainelPesquisarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PainelPesquisarLayout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addComponent(LabelCategoria)
-                .addGap(18, 18, 18)
-                .addComponent(CampoPesquisar)
-                .addGap(18, 18, 18)
-                .addComponent(BotaoPesquisar)
-                .addGap(66, 66, 66))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PainelPesquisarLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-            .addGroup(PainelPesquisarLayout.createSequentialGroup()
-                .addGap(73, 73, 73)
                 .addGroup(PainelPesquisarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(PainelPesquisarLayout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jLabel2))
-                    .addComponent(jLabel1))
+                        .addGap(25, 25, 25)
+                        .addComponent(LabelCategoria)
+                        .addGap(18, 18, 18)
+                        .addComponent(CampoPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(29, 29, 29)
+                        .addComponent(BotaoPesquisar))
+                    .addGroup(PainelPesquisarLayout.createSequentialGroup()
+                        .addGap(52, 52, 52)
+                        .addGroup(PainelPesquisarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(PainelPesquisarLayout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addComponent(jLabel2))
+                            .addComponent(jLabel1)))
+                    .addGroup(PainelPesquisarLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         PainelPesquisarLayout.setVerticalGroup(
@@ -136,11 +137,11 @@ public class AddTag extends javax.swing.JInternalFrame {
                     .addComponent(CampoPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(1, 1, 1)
                 .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 142, Short.MAX_VALUE)
-                .addGap(33, 33, 33))
+                .addGap(26, 26, 26))
         );
 
         PainelPrincipal.addTab("Pesquisar", PainelPesquisar);
@@ -228,19 +229,22 @@ public class AddTag extends javax.swing.JInternalFrame {
 
     private void BotaoAddEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotaoAddEditActionPerformed
         // TODO add your handling code here:
-        String categoria = CampoCategoria.getText();
-        tag = new Tag(categoria);
-        if(CampoId.getText() == null || CampoId.getText().equals("")) {
-                Integer idCriado = 0;
-            try {
-                idCriado = tagDAO.createTag(tag);
-            } catch (SQLException ex) {
-                Logger.getLogger(AddTag.class.getName()).log(Level.SEVERE, null, ex);
-            }
-                tag.setIdTag(idCriado);
-                CampoId.setText(idCriado.toString());
+        if(CampoCategoria.getText().equals("")){
+            JOptionPane.showMessageDialog(this, "Favor Preencher todos os campos!", "Erro!", JOptionPane.ERROR_MESSAGE);
+        } else{
+            String categoria = CampoCategoria.getText();
+            tag = new Tag(categoria);
+            if(CampoId.getText() == null || CampoId.getText().equals("")) {
+                    Integer idCriado = 0;
+                try {
+                    idCriado = tagDAO.createTag(tag);
+                } catch (SQLException ex) {
+                    Logger.getLogger(AddTag.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                    tag.setIdTag(idCriado);
+                    CampoId.setText(idCriado.toString());
 
-            } else {
+            }else {
                 try {
                     int id = Integer.parseInt(CampoId.getText());
                     tag.setIdTag(id);
@@ -249,6 +253,7 @@ public class AddTag extends javax.swing.JInternalFrame {
                     Logger.getLogger(AddTag.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
+        }
     }//GEN-LAST:event_BotaoAddEditActionPerformed
 
     private void BotaoPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotaoPesquisarActionPerformed
@@ -271,10 +276,7 @@ public class AddTag extends javax.swing.JInternalFrame {
             CampoCategoria.setText(tag.getCategoria());
             PainelPrincipal.setSelectedIndex(1);
             CampoCategoria.setEnabled(true);
-//            btNovo.setEnabled(false);
-//            btGravar.setEnabled(true);
-//            btCancelar.setEnabled(true);
-//            btExcluir.setEnabled(true);
+            BotaoExcluir.setEnabled(true);
         }
     }//GEN-LAST:event_tableTagMouseClicked
 

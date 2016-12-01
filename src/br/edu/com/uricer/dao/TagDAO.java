@@ -86,12 +86,10 @@ public class TagDAO {
             stm.execute();
             try (ResultSet resultSet = stm.getResultSet()) {
                 resultSet.next();
-                System.out.println("try tag");
                     int idT = (resultSet.getInt("id"));
                     String categoria = (resultSet.getString("categoria"));
                     tag = new Tag(categoria);
                     tag.setIdTag(idT);
-                    System.out.println("teste tag: " + tag.getCategoria());
                 
                 resultSet.close();
             }
