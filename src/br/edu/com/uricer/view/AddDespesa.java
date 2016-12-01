@@ -59,6 +59,8 @@ public class AddDespesa extends javax.swing.JInternalFrame {
         despesas = new ArrayList<>();
         despesaTableModel = new DespesaTableModel(despesas);
         TableDespesas.setModel(despesaTableModel);
+        BotaoParcelas.setEnabled(false);
+        BotaoExcluir.setEnabled(false);
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -98,6 +100,7 @@ public class AddDespesa extends javax.swing.JInternalFrame {
         ComboBoxCartao = new javax.swing.JComboBox();
         jLabel8 = new javax.swing.JLabel();
         CampoDataAdd = new javax.swing.JTextField();
+        BotaoParcelas = new javax.swing.JButton();
 
         setClosable(true);
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -168,7 +171,7 @@ public class AddDespesa extends javax.swing.JInternalFrame {
                 .addComponent(jLabel3)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(102, Short.MAX_VALUE))
+                .addContainerGap(106, Short.MAX_VALUE))
         );
 
         PainelPrincipal.addTab("Pesquisar", PainelPesquisa);
@@ -215,6 +218,13 @@ public class AddDespesa extends javax.swing.JInternalFrame {
         CampoValorAdd.setFocusLostBehavior(javax.swing.JFormattedTextField.PERSIST);
 
         jLabel8.setText("Data da compra: ");
+
+        BotaoParcelas.setText("Exibir Parcelas");
+        BotaoParcelas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BotaoParcelasActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout PanelAdicionarLayout = new javax.swing.GroupLayout(PanelAdicionar);
         PanelAdicionar.setLayout(PanelAdicionarLayout);
@@ -269,6 +279,7 @@ public class AddDespesa extends javax.swing.JInternalFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(CampoDataAdd)
                                 .addGap(33, 33, 33)))
+                        .addComponent(BotaoParcelas)
                         .addGap(0, 0, Short.MAX_VALUE))))
         );
         PanelAdicionarLayout.setVerticalGroup(
@@ -315,8 +326,9 @@ public class AddDespesa extends javax.swing.JInternalFrame {
                 .addGap(18, 18, 18)
                 .addGroup(PanelAdicionarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(BotaoAddEditar)
-                    .addComponent(BotaoExcluir))
-                .addContainerGap(181, Short.MAX_VALUE))
+                    .addComponent(BotaoExcluir)
+                    .addComponent(BotaoParcelas))
+                .addContainerGap(185, Short.MAX_VALUE))
         );
 
         PainelPrincipal.addTab("Adicionar/Editar", PanelAdicionar);
@@ -356,93 +368,112 @@ public class AddDespesa extends javax.swing.JInternalFrame {
                 }
             }
         }
+        limparEdits();
     }//GEN-LAST:event_BotaoExcluirActionPerformed
 
     private void BotaoAddEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotaoAddEditarActionPerformed
         // TODO add your handling code here:
-        int idTipoDespesa = 0;
-        int idCartao = 0;
-        int idTag = 0;
-        Tag tagObject = null;
-        Cartao cartaoObject = null;
-        TipoDespesa tipoObject = null;
-        String descricao = CampoDescricaoAdd.getText();
-        String local = CampoLocalAdd.getText();
-        String tipoDespesa = ComboBoxPagamento.getSelectedItem().toString();
-        String cartao = ComboBoxCartao.getSelectedItem().toString();
-        int pos = cartao.indexOf(" ");
-        String banco = cartao.substring((pos+3), cartao.length());
-        cartao = cartao.substring(0, pos);
-        String tag = ComboBoxTag.getSelectedItem().toString();
-        try {
-            List<TipoDespesa> idTipoDespesas = tipoDespesaDAO.findByDescricaoTipoDespesa(tipoDespesa);
-            if(idTipoDespesas.size() == 1){
-                for (Iterator<TipoDespesa> it = idTipoDespesas.iterator(); it.hasNext();) {
-                    idTipoDespesa = it.next().getIdTipoDespesa();
-                }
-            }
-            List<Cartao> cartoes = cartaoDAO.findByNomeCartao(cartao, banco);
-            if(cartoes.size() == 1){
-                for (Iterator<Cartao> it = cartoes.iterator(); it.hasNext();) {
-                    idCartao = it.next().getIdCartao();
-                }
-            }
-            List<Tag> tags = tagDAO.findByCategoria(tag);
-            if(tags.size() == 1){
-                for (Iterator<Tag> it = tags.iterator(); it.hasNext();) {
-                    idTag = it.next().getIdTag();
-                }
+        if(CampoDataAdd.getText().equals("") || CampoDescricaoAdd.getText().equals("") || CampoLocalAdd.getText().equals("") || CampoParcelasAdd.getText().equals("") || CampoValorAdd.getText().equals("")){
+            JOptionPane.showMessageDialog(this, "Favor Preencher todos os campos!", "Erro!", JOptionPane.ERROR_MESSAGE);
+        } else{
+            int idTipoDespesa = 0;
+            int idCartao = 0;
+            int idTag = 0;
+            Tag tagObject = null;
+            Cartao cartaoObject = null;
+            TipoDespesa tipoObject = null;
+            String descricao = CampoDescricaoAdd.getText();
+            String local = CampoLocalAdd.getText();
+            String tipoDespesa = ComboBoxPagamento.getSelectedItem().toString();
+            String cartao = "Nenhum";
+            String banco = " ";
+            if(tipoDespesa.equals("Cartão")){
+                cartao = ComboBoxCartao.getSelectedItem().toString();
+                int pos = cartao.indexOf(" ");
+                banco = cartao.substring((pos+3), cartao.length());
+                cartao = cartao.substring(0, pos);
             }
             
-            tagObject = new Tag(tag);
-            tagObject.setIdTag(idTag);
-            cartaoObject = new Cartao(cartao, banco);
-            cartaoObject.setIdCartao(idCartao);
-            tipoObject = new TipoDespesa(tipoDespesa);
-            tipoObject.setIdTipoDespesa(idTipoDespesa);
-            
-        } catch (SQLException ex) {
-            Logger.getLogger(AddDespesa.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        BigDecimal parcelas = new BigDecimal(CampoParcelasAdd.getText());
-        BigDecimal valor = new BigDecimal(CampoValorAdd.getText());
-        SimpleDateFormat sdf= new SimpleDateFormat("dd/MM/yyyy");
-        String dataFormatada = CampoDataAdd.getText();
-        Date data = null;
-        try {
-            data = sdf.parse(dataFormatada);
-        } catch (ParseException ex) {
-            Logger.getLogger(AddReceita.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        despesa = new Despesa(descricao, local, tipoObject, cartaoObject, tagObject, parcelas, valor, data);
-        if(CampoIdAdd.getText() == null || CampoIdAdd.getText().equals("")) {
-            Integer idCriado = 0;
+            String tag = ComboBoxTag.getSelectedItem().toString();
             try {
-                idCriado = despesaDAO.createDespesa(despesa);
-            } catch (SQLException ex) {
-                Logger.getLogger(AddCartao.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            despesa.setIdDespesa(idCriado);
-            CampoIdAdd.setText(idCriado.toString());
-            
-            try {
-                Parcela parcela = new Parcela(valor, idCriado);
-                parcelaDAO.createParcela(parcela);
+                List<TipoDespesa> idTipoDespesas = tipoDespesaDAO.findByDescricaoTipoDespesa(tipoDespesa);
+                if(idTipoDespesas.size() == 1){
+                    for (Iterator<TipoDespesa> it = idTipoDespesas.iterator(); it.hasNext();) {
+                        idTipoDespesa = it.next().getIdTipoDespesa();
+                    }
+                }
+                List<Cartao> cartoes = cartaoDAO.findByNomeCartao(cartao, banco);
+                if(cartoes.size() == 1){
+                    for (Iterator<Cartao> it = cartoes.iterator(); it.hasNext();) {
+                        idCartao = it.next().getIdCartao();
+                    }
+                }
+                List<Tag> tags = tagDAO.findByCategoria(tag);
+                if(tags.size() == 1){
+                    for (Iterator<Tag> it = tags.iterator(); it.hasNext();) {
+                        idTag = it.next().getIdTag();
+                    }
+                }
+
+                tagObject = new Tag(tag);
+                tagObject.setIdTag(idTag);
+                cartaoObject = new Cartao(cartao, banco);
+                cartaoObject.setIdCartao(idCartao);
+                tipoObject = new TipoDespesa(tipoDespesa);
+                tipoObject.setIdTipoDespesa(idTipoDespesa);
+
             } catch (SQLException ex) {
                 Logger.getLogger(AddDespesa.class.getName()).log(Level.SEVERE, null, ex);
             }
-
-        } else {
+            BigDecimal parcelas = new BigDecimal(CampoParcelasAdd.getText());
+            BigDecimal valor = new BigDecimal(CampoValorAdd.getText());
+            SimpleDateFormat sdf= new SimpleDateFormat("dd/MM/yyyy");
+            String dataFormatada = CampoDataAdd.getText();
+            Date data = null;
             try {
-                int id = Integer.parseInt(CampoIdAdd.getText());
-                despesa.setIdDespesa(id);
-                despesaDAO.updateDespesa(despesa);
-            } catch (SQLException ex) {
-                Logger.getLogger(AddCartao.class.getName()).log(Level.SEVERE, null, ex);
+                data = sdf.parse(dataFormatada);
+            } catch (ParseException ex) {
+                Logger.getLogger(AddReceita.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            despesa = new Despesa(descricao, local, tipoObject, cartaoObject, tagObject, parcelas, valor, data);
+            if(CampoIdAdd.getText() == null || CampoIdAdd.getText().equals("")) {
+                Integer idCriado = 0;
+                try {
+                    idCriado = despesaDAO.createDespesa(despesa);
+                } catch (SQLException ex) {
+                    Logger.getLogger(AddCartao.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                despesa.setIdDespesa(idCriado);
+                CampoIdAdd.setText(idCriado.toString());
+
+                try {
+                    Parcela parcela = new Parcela(valor, idCriado, data);
+                    parcelaDAO.createParcela(parcela);
+                } catch (SQLException ex) {
+                    Logger.getLogger(AddDespesa.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            } else {
+                try {
+                    int id = Integer.parseInt(CampoIdAdd.getText());
+                    despesa.setIdDespesa(id);
+                    despesaDAO.updateDespesa(despesa);
+                } catch (SQLException ex) {
+                    Logger.getLogger(AddCartao.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
     }//GEN-LAST:event_BotaoAddEditarActionPerformed
 
+    private void limparEdits(){
+        CampoDataAdd.setText("");
+        CampoDescricaoAdd.setText("");
+        CampoPesquisar.setText("");
+        CampoIdAdd.setText("");
+        CampoLocalAdd.setText("");
+        CampoParcelasAdd.setText("");
+        CampoValorAdd.setText("");
+    }
     private void BotaoPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotaoPesquisarActionPerformed
         // TODO add your handling code here:
         try{  
@@ -462,9 +493,9 @@ public class AddDespesa extends javax.swing.JInternalFrame {
             CampoIdAdd.setText(String.valueOf(despesa.getIdDespesa()));
             CampoDescricaoAdd.setText(despesa.getDescricaoDespesa());
             CampoLocalAdd.setText(despesa.getLocalDespesa());
-            ComboBoxPagamento.setSelectedItem(despesa.getTipoDespesa());
-            ComboBoxCartao.setSelectedItem(despesa.getFkCartaoUsado());
-            ComboBoxTag.setSelectedItem(despesa.getTag());
+            ComboBoxPagamento.setSelectedItem(despesa.getTipoDespesa().getDescricaoTipoDespesa());
+            ComboBoxCartao.setSelectedItem(despesa.getFkCartaoUsado().getNomeCartao() + " - " + despesa.getFkCartaoUsado().getBanco());
+            ComboBoxTag.setSelectedItem(despesa.getTag().getCategoria());
             CampoParcelasAdd.setText(String.valueOf(despesa.getNumeroParcela()));
             CampoValorAdd.setText(String.valueOf(despesa.getValorTotalDespesa()));
             SimpleDateFormat sdf= new SimpleDateFormat("dd/MM/yyyy");
@@ -472,8 +503,18 @@ public class AddDespesa extends javax.swing.JInternalFrame {
             CampoDataAdd.setText(sdf.format(dataFormatada));
             PainelPrincipal.setSelectedIndex(1);
             CampoDescricaoAdd.setEnabled(true);
+            BotaoParcelas.setEnabled(true);
+            BotaoExcluir.setEnabled(true);
         }
     }//GEN-LAST:event_TableDespesasMouseClicked
+
+    private void BotaoParcelasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotaoParcelasActionPerformed
+        try{            
+            new ParcelasEdit(CampoIdAdd.getText()).setVisible(true);
+        }catch (SQLException ex) {
+            Logger.getLogger(AddDespesa.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_BotaoParcelasActionPerformed
 
     private void listaComboBoxs(){       
         try {
@@ -531,6 +572,7 @@ public class AddDespesa extends javax.swing.JInternalFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BotaoAddEditar;
     private javax.swing.JButton BotaoExcluir;
+    private javax.swing.JButton BotaoParcelas;
     private javax.swing.JButton BotaoPesquisar;
     private javax.swing.JTextField CampoDataAdd;
     private javax.swing.JTextField CampoDescricaoAdd;
