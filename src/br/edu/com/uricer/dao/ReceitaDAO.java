@@ -56,6 +56,7 @@ public class ReceitaDAO {
             stm.setInt(1, receita.getIdReceita());
             
             conexao.commit();
+            JOptionPane.showMessageDialog(null, "Deletado com sucesso!", "Sucesso!", JOptionPane.INFORMATION_MESSAGE);
         }catch(Exception ex){
             System.out.println("Erro ao tentar executar delete: " + ex.getMessage());
             conexao.rollback();
@@ -116,7 +117,6 @@ public class ReceitaDAO {
                     receitas.add(receita);
                 }
             }
-            System.out.println("teste: " + nome);
         }catch(Exception ex){
             System.out.println("Erro ao tentar executar busca por nome: " + ex.getMessage());
         } 

@@ -48,7 +48,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         ProximosPagamentosMenu = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("tete");
+        setTitle("Controle Financeiro");
 
         jDesktopPane1.setLayout(new javax.swing.OverlayLayout(jDesktopPane1));
 
@@ -106,12 +106,23 @@ public class TelaPrincipal extends javax.swing.JFrame {
         jMenu2.setText("Emitir");
 
         FaturaMenu.setText("Fatura do Cartao");
+        FaturaMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                FaturaMenuActionPerformed(evt);
+            }
+        });
         jMenu2.add(FaturaMenu);
 
         RelatorioDespesaMenu.setText("Relatorio de Despesas");
+        RelatorioDespesaMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                RelatorioDespesaMenuActionPerformed(evt);
+            }
+        });
         jMenu2.add(RelatorioDespesaMenu);
 
         ProximosPagamentosMenu.setText("Próximos pagamentos");
+        ProximosPagamentosMenu.setEnabled(false);
         jMenu2.add(ProximosPagamentosMenu);
 
         jMenuBar1.add(jMenu2);
@@ -122,7 +133,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jDesktopPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 880, Short.MAX_VALUE)
+            .addComponent(jDesktopPane1)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -164,6 +175,22 @@ public class TelaPrincipal extends javax.swing.JFrame {
         addDespesa.setVisible(true);
         jDesktopPane1.add(addDespesa);
     }//GEN-LAST:event_DespesaMenuActionPerformed
+
+    private void FaturaMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FaturaMenuActionPerformed
+        // TODO add your handling code here:
+        JInternalFrame faturaCartao = new JInternalFrame();
+        faturaCartao = new FaturaCartao();
+        faturaCartao.setVisible(true);
+        jDesktopPane1.add(faturaCartao);
+    }//GEN-LAST:event_FaturaMenuActionPerformed
+
+    private void RelatorioDespesaMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RelatorioDespesaMenuActionPerformed
+        // TODO add your handling code here:
+        JInternalFrame relatorioDespesa = new JInternalFrame();
+        relatorioDespesa = new RelatorioDespesa();
+        relatorioDespesa.setVisible(true);
+        jDesktopPane1.add(relatorioDespesa);
+    }//GEN-LAST:event_RelatorioDespesaMenuActionPerformed
 
     /**
      * @param args the command line arguments
