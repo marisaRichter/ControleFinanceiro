@@ -117,20 +117,20 @@ public class AddReceita extends javax.swing.JInternalFrame {
                 .addGap(19, 19, 19)
                 .addGroup(PainelPesquisarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 364, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(PainelPesquisarLayout.createSequentialGroup()
-                        .addGap(64, 64, 64)
-                        .addGroup(PainelPesquisarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel5)
-                            .addGroup(PainelPesquisarLayout.createSequentialGroup()
-                                .addGap(10, 10, 10)
-                                .addComponent(jLabel6))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PainelPesquisarLayout.createSequentialGroup()
                         .addComponent(LabelPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(CampoPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(BotaoPesquisar)
-                        .addGap(37, 37, 37)))
+                        .addGap(37, 37, 37))
+                    .addGroup(PainelPesquisarLayout.createSequentialGroup()
+                        .addGap(64, 64, 64)
+                        .addGroup(PainelPesquisarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(PainelPesquisarLayout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addComponent(jLabel6))
+                            .addComponent(jLabel5))))
                 .addContainerGap(21, Short.MAX_VALUE))
         );
         PainelPesquisarLayout.setVerticalGroup(
@@ -143,9 +143,9 @@ public class AddReceita extends javax.swing.JInternalFrame {
                     .addComponent(BotaoPesquisar))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel6)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -185,7 +185,6 @@ public class AddReceita extends javax.swing.JInternalFrame {
             .addGroup(PainelAddEditLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(PainelAddEditLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(BotaoAdd)
                     .addGroup(PainelAddEditLayout.createSequentialGroup()
                         .addGroup(PainelAddEditLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -193,14 +192,15 @@ public class AddReceita extends javax.swing.JInternalFrame {
                             .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(PainelAddEditLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(CampoIdAdd)
-                            .addComponent(CampoValorAdd)
-                            .addComponent(CampoDataAdd)
-                            .addGroup(PainelAddEditLayout.createSequentialGroup()
-                                .addComponent(CampoDescricaoAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE)))))
-                .addGap(210, 210, 210))
+                        .addGroup(PainelAddEditLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(CampoDataAdd, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
+                            .addComponent(CampoDescricaoAdd, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(CampoValorAdd, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(CampoIdAdd))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(PainelAddEditLayout.createSequentialGroup()
+                        .addComponent(BotaoAdd)
+                        .addContainerGap(279, Short.MAX_VALUE))))
         );
         PainelAddEditLayout.setVerticalGroup(
             PainelAddEditLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -223,7 +223,7 @@ public class AddReceita extends javax.swing.JInternalFrame {
                     .addComponent(CampoDataAdd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(BotaoAdd)
-                .addContainerGap(112, Short.MAX_VALUE))
+                .addContainerGap(160, Short.MAX_VALUE))
         );
 
         PainelPrincipal.addTab("Adicionar", PainelAddEdit);
@@ -280,19 +280,6 @@ public class AddReceita extends javax.swing.JInternalFrame {
             }
     }//GEN-LAST:event_BotaoAddActionPerformed
 
-    private void BotaoPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotaoPesquisarActionPerformed
-        // TODO add your handling code here:
-        try {
-            receitas = receitaDAO.findByDescricao(CampoPesquisar.getText());
-            System.out.println("receitas: " + receitas);
-            receitaTableModel.setReceitas(receitas);
-            receitaTableModel.fireTableDataChanged();
-        } catch (SQLException ex) {
-            Logger.getLogger(AddCartao.class.getName()).log(Level.SEVERE, null, ex);
-
-        }
-    }//GEN-LAST:event_BotaoPesquisarActionPerformed
-
     private void TableReceitaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TableReceitaMouseClicked
         // TODO add your handling code here:
         if(evt.getClickCount() == 2) {
@@ -305,13 +292,32 @@ public class AddReceita extends javax.swing.JInternalFrame {
             CampoDataAdd.setText(sdf.format(dataFormatada));
             PainelPrincipal.setSelectedIndex(1);
             CampoDescricaoAdd.setEnabled(true);
-//            btNovo.setEnabled(false);
-//            btGravar.setEnabled(true);
-//            btCancelar.setEnabled(true);
-//            btExcluir.setEnabled(true);
+            //            btNovo.setEnabled(false);
+            //            btGravar.setEnabled(true);
+            //            btCancelar.setEnabled(true);
+            //            btExcluir.setEnabled(true);
         }
     }//GEN-LAST:event_TableReceitaMouseClicked
 
+    private void BotaoPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotaoPesquisarActionPerformed
+        // TODO add your handling code here:
+        try {
+            receitas = receitaDAO.findByDescricao(CampoPesquisar.getText());
+            receitaTableModel.setReceitas(receitas);
+            receitaTableModel.fireTableDataChanged();
+        } catch (SQLException ex) {
+            Logger.getLogger(AddCartao.class.getName()).log(Level.SEVERE, null, ex);
+
+        }
+    }//GEN-LAST:event_BotaoPesquisarActionPerformed
+    
+    private void limparEdits(){
+        CampoDataAdd.setText("");
+        CampoDescricaoAdd.setText("");
+        CampoPesquisar.setText("");
+        CampoIdAdd.setText("");
+        CampoValorAdd.setText("");
+    }
     /**
      * @param args the command line arguments
      */

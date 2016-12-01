@@ -17,7 +17,6 @@ public class ReceitaTableModel extends AbstractTableModel{
     }
 
     public void setReceitas(List<Receita> receitas) {
-        System.out.println("table");
         this.receitas = receitas;
     }
 
