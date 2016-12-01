@@ -37,6 +37,7 @@ public class AddCartao extends javax.swing.JInternalFrame {
         cartoes = new ArrayList<>();
         cartaoTableModel = new CartaoTableModel(cartoes);
         tableCartoes.setModel(cartaoTableModel);
+        BotaoExcluir.enable(false);
     }
 
     /**
@@ -112,25 +113,23 @@ public class AddCartao extends javax.swing.JInternalFrame {
             PanelPesquisarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PanelPesquisarLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                .addContainerGap())
-            .addGroup(PanelPesquisarLayout.createSequentialGroup()
-                .addGap(70, 70, 70)
-                .addGroup(PanelPesquisarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(PanelPesquisarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 404, Short.MAX_VALUE)
                     .addGroup(PanelPesquisarLayout.createSequentialGroup()
-                        .addGroup(PanelPesquisarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(PanelPesquisarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(PanelPesquisarLayout.createSequentialGroup()
-                                .addGap(10, 10, 10)
-                                .addComponent(jLabel2))
-                            .addComponent(jLabel1))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(PanelPesquisarLayout.createSequentialGroup()
-                        .addComponent(LabelNomePesquisa)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(CampoPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10)
-                        .addComponent(BotaoPesquisar)
-                        .addGap(98, 98, 98))))
+                                .addComponent(LabelNomePesquisa)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(CampoPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(BotaoPesquisar))
+                            .addGroup(PanelPesquisarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(PanelPesquisarLayout.createSequentialGroup()
+                                    .addGap(10, 10, 10)
+                                    .addComponent(jLabel2))
+                                .addComponent(jLabel1)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         PanelPesquisarLayout.setVerticalGroup(
             PanelPesquisarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -138,15 +137,14 @@ public class AddCartao extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(PanelPesquisarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(LabelNomePesquisa)
-                    .addComponent(CampoPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(BotaoPesquisar))
+                    .addComponent(BotaoPesquisar)
+                    .addComponent(CampoPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(5, 5, 5)
                 .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 117, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE))
         );
 
         PainelPrincipal.addTab("Pesquisar", PanelPesquisar);
@@ -253,8 +251,12 @@ public class AddCartao extends javax.swing.JInternalFrame {
         
         String nome = CampoNomeAdd.getText();
         String banco = CampoBancoAdd.getText();
-        System.out.println("campo: " + nome + "-" + banco);
         cartao = new Cartao(nome, banco);
+        if(CampoNomeAdd.getText().equals("") || CampoBancoAdd.getText().equals("")){
+            JOptionPane.showMessageDialog(this, "Favor Preencher todos os campos!", "Erro!", JOptionPane.ERROR_MESSAGE);
+        }else{
+            
+        
         if(CampoIdAdd.getText() == null || CampoIdAdd.getText().equals("")) {
                 Integer idCriado = 0;
             try {
@@ -275,7 +277,30 @@ public class AddCartao extends javax.swing.JInternalFrame {
                     Logger.getLogger(AddCartao.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
+        }
     }//GEN-LAST:event_BotaoAddEditarActionPerformed
+
+    private void BotaoExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotaoExcluirActionPerformed
+        // TODO add your handling code here:
+        if(CampoIdAdd.getText() != null || !CampoIdAdd.getText().equals("")) {
+            int resultado = JOptionPane.showConfirmDialog(this, "Confirma exclusão", "Confirmação", JOptionPane.YES_NO_CANCEL_OPTION);
+            if(resultado == 0) {
+                try {
+                    String nome = CampoNomeAdd.getText();
+                    String banco = CampoBancoAdd.getText();
+                    int id = Integer.parseInt(CampoIdAdd.getText());
+                    cartao = new Cartao(nome, banco);
+                    cartao.setIdCartao(id);
+                    cartaoDAO.deleteCartao(cartao);
+                    limparEdits();
+                } catch (SQLException ex) {
+                    Logger.getLogger(AddCartao.class.getName()).log(Level.SEVERE, null, ex);
+                    JOptionPane.showMessageDialog(this, "Erro ao excluir", "Erro", JOptionPane.ERROR);
+                }
+            }
+        }
+        limparEdits();
+    }//GEN-LAST:event_BotaoExcluirActionPerformed
 
     private void BotaoPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotaoPesquisarActionPerformed
         // TODO add your handling code here:
@@ -298,43 +323,14 @@ public class AddCartao extends javax.swing.JInternalFrame {
             CampoBancoAdd.setText(cartao.getBanco());
             PainelPrincipal.setSelectedIndex(1);
             CampoNomeAdd.setEnabled(true);
-//            btNovo.setEnabled(false);
-//            btGravar.setEnabled(true);
-//            btCancelar.setEnabled(true);
-//            btExcluir.setEnabled(true);
-        }else{
-            System.out.println("MARISA");
+            BotaoExcluir.setEnabled(true);
         }
     }//GEN-LAST:event_tableCartoesMouseClicked
-
-    private void BotaoExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotaoExcluirActionPerformed
-        // TODO add your handling code here:
-        if(CampoIdAdd.getText() != null || !CampoIdAdd.getText().equals("")) {
-            int resultado = JOptionPane.showConfirmDialog(this, "Confirma exclusão", "Confirmação", JOptionPane.YES_NO_CANCEL_OPTION);
-            if(resultado == 0) {
-                try {
-                    String nome = CampoNomeAdd.getText();
-                    String banco = CampoBancoAdd.getText();
-                    int id = Integer.parseInt(CampoIdAdd.getText());
-                    cartao = new Cartao(nome, banco);
-                    cartao.setIdCartao(id);
-                    cartaoDAO.deleteCartao(cartao);
-                    limparEdits();
-                } catch (SQLException ex) {
-                    Logger.getLogger(AddCartao.class.getName()).log(Level.SEVERE, null, ex);
-                    JOptionPane.showMessageDialog(this, "Erro ao excluir", "Erro", JOptionPane.ERROR);
-                }
-            }
-        }
-    }//GEN-LAST:event_BotaoExcluirActionPerformed
     private void limparEdits(){
         CampoIdAdd.setText("");
         CampoNomeAdd.setText("");
         CampoBancoAdd.setText("");
         CampoPesquisar.setText("");
-    }
-    private void cartaoParaEdit() {
-        
     }
     /**
      * @param args the command line arguments

@@ -39,7 +39,6 @@ public class CartaoTableModel extends AbstractTableModel{
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         Cartao cartao = cartoes.get(rowIndex);
-        System.out.println("teste");
         switch (columnIndex) {
             case 0: return cartao.getIdCartao();
             case 1: return cartao.getNomeCartao();
