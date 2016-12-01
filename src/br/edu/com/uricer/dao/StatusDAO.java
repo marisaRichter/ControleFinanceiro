@@ -16,9 +16,9 @@ import java.util.List;
 public class StatusDAO {
     private Connection conexao = null;
     
-    private static final String SQLList = "SELECT * FROM StatusParcela";
-    private static final String SQLFindById = "SELECT * FROM StatusParcela WHERE id=?";
-    private static final String SQLFindByNome = "SELECT * FROM StatusParcela WHERE status=?";
+    private static final String SQLList = "SELECT * FROM \"Status\"";
+    private static final String SQLFindById = "SELECT * FROM \"Status\" WHERE id=?";
+    private static final String SQLFindByNome = "SELECT * FROM \"Status\" WHERE status=?;";
     private static final String SQLUpdate = "UPDATE StatusParcela SET status=? WHERE id=?";
     private static final String SQLDelete = "DELETE FROM StatusParcela WHERE id=?";
     private static final String SQLCreate = "INSERT INTO StatusParcela (status) VALUES (?)";
@@ -63,40 +63,60 @@ public class StatusDAO {
         }  
     }
     public StatusParcela findByIdStatus(Integer id) throws SQLException {
-        StatusParcela parcela = null;
+        StatusParcela status = null;
         try(PreparedStatement stm = conexao.prepareStatement(SQLFindById, Statement.RETURN_GENERATED_KEYS)){
             stm.setInt(1, id);            
             stm.execute();
             try(ResultSet resultSet = stm.getResultSet()) {
                 while(resultSet.next()) {
-                    parcela = new StatusParcela();
-                    parcela.setIdStatus(resultSet.getInt("id"));
-                    parcela.setStatusParcela(resultSet.getString("status"));
+                    int idS = (resultSet.getInt("id"));
+                    String descricao = (resultSet.getString("status"));
+                    status = new StatusParcela(descricao);
+                    status.setIdStatus(idS);
                 }
             }
         }catch(Exception ex){
-            System.out.println("Erro ao tentar executar busca por id: " + ex.getMessage());
+            System.out.println("Erro ao tentar executar busca por id status: " + ex.getMessage());
         }  
         
-        return parcela;
+        return status;
     }
     
-    public List<StatusParcela> findByStatus(String nome) throws SQLException {
+    public StatusParcela findByStatus(String nome) throws SQLException {
+        StatusParcela statusParcela = null;
+        try(PreparedStatement stm = conexao.prepareStatement(SQLFindByNome)){
+            stm.setString(1, nome);            
+            stm.execute();
+            try(ResultSet resultSet = stm.getResultSet()) {
+                resultSet.next();
+                    int id = (resultSet.getInt("id"));
+                    String status = (resultSet.getString("status"));
+                    statusParcela = new StatusParcela(status);
+                    statusParcela.setIdStatus(id);
+                
+            }
+        }catch(Exception ex){
+            System.out.println("Erro ao tentar executar busca por nome: " + ex.getMessage());
+        } 
+        return statusParcela;
+    }
+    
+    public List<StatusParcela> listar() throws SQLException {
         List<StatusParcela> statusParcelas = new ArrayList<>();
         StatusParcela statusParcela = null;
-        try(PreparedStatement stm = conexao.prepareStatement(SQLFindByNome, Statement.RETURN_GENERATED_KEYS)){
-            stm.setString(1, "%" + nome.toUpperCase() + "%");            
+        try(PreparedStatement stm = conexao.prepareStatement(SQLList)){         
             stm.execute();
             try(ResultSet resultSet = stm.getResultSet()) {
                 while(resultSet.next()) {
-                    statusParcela = new StatusParcela();
-                    statusParcela.setIdStatus(resultSet.getInt("id"));
-                    statusParcela.setStatusParcela(resultSet.getString("nome"));
+                    int id = (resultSet.getInt("id"));
+                    String status = (resultSet.getString("status"));
+                    statusParcela = new StatusParcela(status);
+                    statusParcela.setIdStatus(id);
                     statusParcelas.add(statusParcela);
                 }
             }
         }catch(Exception ex){
-            System.out.println("Erro ao tentar executar busca por nome: " + ex.getMessage());
+            System.out.println("Erro ao tentar executar busca por list: " + ex.getMessage());
         } 
         return statusParcelas;
     }
