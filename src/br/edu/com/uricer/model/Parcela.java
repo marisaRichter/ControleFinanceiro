@@ -15,14 +15,25 @@ public class Parcela {
     private int fkDespesa;
     private Date dataVencimento;
     private BigDecimal jurosPorVencimento;
-    private int statusParcela;
+    private StatusParcela statusParcela;
 
-    public Parcela(BigDecimal valorParcela, int fkDespesa) throws SQLException {
+    public Parcela(BigDecimal valorParcela, int fkDespesa, Date data) throws SQLException {
         this.valorParcela = valorParcela;
         this.saldoAPagar = valorParcela;
-        this.statusParcela = 3;
+        this.statusParcela = new StatusParcela("Para Pagar");
+        this.statusParcela.setIdStatus(3);
         this.fkDespesa = fkDespesa;
-        this.dataVencimento = null;
+        this.dataVencimento = data;
+        this.jurosPorVencimento = new BigDecimal(0.0);
+    }
+    
+    public Parcela(int id, BigDecimal valorParcela, BigDecimal aPagar, StatusParcela status, int fkDespesa, Date data){
+        this.idParcela = id;
+        this.valorParcela = valorParcela;
+        this.saldoAPagar = aPagar;
+        this.statusParcela = status;
+        this.fkDespesa = fkDespesa;
+        this.dataVencimento = data;
         this.jurosPorVencimento = new BigDecimal(0.0);
     }
 
@@ -62,11 +73,11 @@ public class Parcela {
         this.saldoAPagar = saldoAPagar;
     }
 
-    public int getStatusParcela() {
+    public StatusParcela getStatusParcela() {
         return statusParcela;
     }
 
-    public void setStatusParcela(int statusParcela) {
+    public void setStatusParcela(StatusParcela statusParcela) {
         this.statusParcela = statusParcela;
     }
 
