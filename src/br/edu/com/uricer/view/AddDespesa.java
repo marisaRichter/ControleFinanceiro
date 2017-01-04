@@ -447,8 +447,18 @@ public class AddDespesa extends javax.swing.JInternalFrame {
                 CampoIdAdd.setText(idCriado.toString());
 
                 try {
-                    Parcela parcela = new Parcela(valor, idCriado, data);
-                    parcelaDAO.createParcela(parcela);
+                    if(parcelas > BigDecimal(1.0){
+                        
+                        for(int i = 1; i <= parcelas; i++){
+                            Parcela parcela = new Parcela(valor.divide(parcelas), idCriado, data);
+                            parcelaDAO.createParcela(parcela);
+                        }
+                    } else{
+                        Parcela parcela = new Parcela(valor, idCriado, data);
+                        parcelaDAO.createParcela(parcela);
+                    }
+                    
+                    
                 } catch (SQLException ex) {
                     Logger.getLogger(AddDespesa.class.getName()).log(Level.SEVERE, null, ex);
                 }
